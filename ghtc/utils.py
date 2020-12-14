@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 import os
 import jinja2
 from git import Repo, Tag, Commit
@@ -48,3 +48,13 @@ def render_template(context, template_file: str = None) -> str:
         content = f.read()
     template = jinja2.Template(content)
     return template.render(context)
+
+
+def get_reverted_commit(commit: Commit) -> Optional[str]:
+    for tmp in commit.message.splitlines():
+        line = tmp.strip()
+        if line.startswith("This reverts commit "):
+            sha = line.replace("This reverts commit ", "").split(".")[0]
+            if len(sha) >= 40:
+                return sha
+    return None

@@ -1,22 +1,10 @@
 from typing import Optional, List, Dict
-import enum
 import re
-from dataclasses import dataclass
-
-
-class ConventionalCommitType(enum.Enum):
-
-    FEAT = 0
-    FIX = 1
-    BUILD = 2
-    CHORE = 3
-    CI = 4
-    DOCS = 5
-    STYLE = 6
-    REFACTOR = 7
-    PERF = 8
-    TEST = 9
-    OTHER = 10
+from ghtc.models import (
+    ConventionalCommitType,
+    ConventionalCommitFooter,
+    ConventionalCommitMessage,
+)
 
 
 TYPE_MAPPINGS: Dict[str, ConventionalCommitType] = {
@@ -34,32 +22,6 @@ TYPE_MAPPINGS: Dict[str, ConventionalCommitType] = {
     "test": ConventionalCommitType.TEST,
     "tests": ConventionalCommitType.TEST,
 }
-
-
-@dataclass
-class ConventionalCommitFooter:
-
-    key: str
-    value: str
-
-
-@dataclass
-class ConventionalCommitMessage:
-
-    type: ConventionalCommitType
-    description: str
-    breaking: bool = False
-    scope: Optional[str] = None
-    body: Optional[str] = None
-    footers: Optional[List[ConventionalCommitFooter]] = None
-
-
-def type_string_to_commit_type(type_str: str) -> ConventionalCommitType:
-    if type_str not in TYPE_MAPPINGS:
-        return ConventionalCommitType.OTHER
-    return TYPE_MAPPINGS[type_str]
-
-
 TITLE_REGEX = r"^([a-zA-Z0-9_-]+)(!{0,1})(\([a-zA-Z0-9_-]*\)){0,1}(!{0,1}): (.*)$"
 TITLE_COMPILED_REGEX = re.compile(TITLE_REGEX)
 FOOTER_REGEX1 = r"^([a-zA-Z0-9_-]+): (.*)$"
@@ -68,6 +30,12 @@ FOOTER_REGEX2 = r"^([a-zA-Z0-9_-]+) #(.*)$"
 FOOTER_COMPILED_REGEX2 = re.compile(FOOTER_REGEX2)
 BREAKING_CHANGE_FOOTER_REGEX = r"^BREAKING[- ]CHANGE: (.*)$"
 BREAKING_CHANGE_FOOTER_COMPILED_REGEX = re.compile(BREAKING_CHANGE_FOOTER_REGEX)
+
+
+def type_string_to_commit_type(type_str: str) -> ConventionalCommitType:
+    if type_str not in TYPE_MAPPINGS:
+        return ConventionalCommitType.OTHER
+    return TYPE_MAPPINGS[type_str]
 
 
 def parse(commit_message: str) -> Optional[ConventionalCommitMessage]:
