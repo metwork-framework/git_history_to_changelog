@@ -17,7 +17,7 @@ from ghtc.models import (
 from ghtc.parser import parse
 
 
-def main(
+def cli(
     repo_root: str,
     tags_regex: str = "^v[0-9]",
     starting_rev: str = None,
@@ -78,5 +78,9 @@ def main(
     print(render_template(context))
 
 
+def main():
+    typer.run(cli)
+
+
 if __name__ == "__main__":
-    typer.run(main)
+    main()
