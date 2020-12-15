@@ -23,6 +23,7 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(),
     install_requires=install_requires,
+    include_package_data=True,
     entry_points={
         "console_scripts": [
             "ghtc = ghtc.cli:main",
