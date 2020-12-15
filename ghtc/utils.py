@@ -23,7 +23,7 @@ def get_tags(repo: Repo, tag_regex: str) -> List[Tag]:
 
 def get_commits_between(repo: Repo, rev1: str = None, rev2: str = None) -> List[Commit]:
     kwargs = {}
-    if rev1 is not None or rev2 is not None:
+    if (rev1 is not None and rev1 != "") or (rev2 is not None and rev2 != ""):
         tag1_name = "" if rev1 is None else rev1
         tag2_name = "HEAD" if rev2 is None else rev2
         kwargs["rev"] = f"{tag1_name}..{tag2_name}"
