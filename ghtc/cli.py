@@ -4,7 +4,6 @@ from git import Repo
 from ghtc.utils import (
     get_tags,
     get_commits_between,
-    get_tag,
     render_template,
     get_reverted_commit,
 )
@@ -21,7 +20,7 @@ from ghtc.parser import parse
 def main(
     repo_root: str,
     tags_regex: str = "^v[0-9]",
-    starting_tag: str = None,
+    starting_rev: str = None,
     remove_duplicates_entries=True,
     unreleased=True,
     include_type: List[str] = [],
@@ -29,7 +28,7 @@ def main(
     unreleased_title="[Unreleased]",
 ):
     repo = Repo(repo_root)
-    previous_tag = get_tag(repo, starting_tag)
+    previous_tag = starting_rev
     context: Dict[str, Any] = {
         "TITLE": title,
         "UNRELEASED_TAG_TIMESTAMP": UNRELEASED_TAG_TIMESTAMP,
@@ -47,16 +46,18 @@ def main(
         if tag is None:
             tag_name = unreleased_title
             tag_date = UNRELEASED_TAG_TIMESTAMP
+            rev = None
         else:
             tag_name = tag.name
             tag_date = tag.object.authored_date
+            rev = tag_name
         reverted_commits = []
-        for commit in get_commits_between(repo, previous_tag, tag):
+        for commit in get_commits_between(repo, previous_tag, rev):
             reverted_commit = get_reverted_commit(commit)
             if reverted_commit is not None:
                 reverted_commits.append(reverted_commit)
         lines: Dict[ConventionalCommitType, List[ChangelogLine]] = {}
-        for commit in get_commits_between(repo, previous_tag, tag):
+        for commit in get_commits_between(repo, previous_tag, rev):
             if commit.hexsha in reverted_commits:
                 continue
             msg: Optional[ConventionalCommitMessage] = parse(commit.message)

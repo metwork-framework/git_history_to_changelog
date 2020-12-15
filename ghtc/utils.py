@@ -21,20 +21,11 @@ def get_tags(repo: Repo, tag_regex: str) -> List[Tag]:
     return res
 
 
-def get_tag(repo: Repo, tag_name: str = None) -> Tag:
-    if tag_name is None:
-        return None
-    for tag in repo.tags:
-        if tag.name == tag_name:
-            return tag
-    raise TagNotFound(f"tag: {tag_name} not found")
-
-
-def get_commits_between(repo: Repo, tag1: Tag, tag2: Tag = None) -> List[Commit]:
+def get_commits_between(repo: Repo, rev1: str = None, rev2: str = None) -> List[Commit]:
     kwargs = {}
-    if tag1 is not None or tag2 is not None:
-        tag1_name = "" if tag1 is None else tag1.name
-        tag2_name = "HEAD" if tag2 is None else tag2.name
+    if rev1 is not None or rev2 is not None:
+        tag1_name = "" if rev1 is None else rev1
+        tag2_name = "HEAD" if rev2 is None else rev2
         kwargs["rev"] = f"{tag1_name}..{tag2_name}"
     return list(repo.iter_commits(**kwargs))
 
