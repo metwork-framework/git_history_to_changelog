@@ -16,7 +16,7 @@ setup(
     name='ghtc',
     version="0.0.0",
     license="BSD 3",
-    python_requires='>=3.7',
+    python_requires='>=3.6',
     url="https://git.meteo.fr/dsi-dev-ws/ghtc",
     description="ghtc service",
     long_description=long_description,
