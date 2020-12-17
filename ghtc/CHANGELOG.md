@@ -32,7 +32,7 @@
 
 ### {{ TYPE_MAPPINGS.get(CAT.name, CAT.name) }}
 
-{% for LINE in LINES|sort(attribute='commit_timestamp', reverse=True) %}
+{% for LINE in LINES|sort(attribute='commit_timestamp', reverse=False) %}
 - {{ LINE.commit_message.description }}
 {%- endfor %}
 
