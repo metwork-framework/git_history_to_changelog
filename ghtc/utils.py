@@ -29,7 +29,7 @@ def get_commits_between(repo: Repo, rev1: str = None, rev2: str = None) -> List[
     kwargs = {}
     first_commit = None
     if (rev1 is not None and rev1 != "") or (rev2 is not None and rev2 != ""):
-        if rev1 is None:
+        if rev1 is None or rev1 == "":
             first_commit = get_first_commit(repo)
             tag1_name = first_commit.hexsha
         else:
