@@ -73,7 +73,8 @@ def cli(
                 continue
             lines[cat].insert(0, cline)
         entry = ChangelogEntryForATag(tag_name, tag_date, lines)
-        context["TAGS"].append(entry)
+        if tag is not None or len(lines) > 0:
+            context["TAGS"].append(entry)
         previous_tag = tag
     print(render_template(context))
 
