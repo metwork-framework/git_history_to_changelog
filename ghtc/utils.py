@@ -21,13 +21,26 @@ def get_tags(repo: Repo, tag_regex: str) -> List[Tag]:
     return res
 
 
+def get_first_commit(repo: Repo) -> Commit:
+    return list(repo.iter_commits(max_parents=0))[0]
+
+
 def get_commits_between(repo: Repo, rev1: str = None, rev2: str = None) -> List[Commit]:
     kwargs = {}
+    first_commit = None
     if (rev1 is not None and rev1 != "") or (rev2 is not None and rev2 != ""):
-        tag1_name = "" if rev1 is None else rev1
+        if rev1 is None:
+            first_commit = get_first_commit(repo)
+            tag1_name = first_commit.hexsha
+        else:
+            tag1_name = rev1
         tag2_name = "HEAD" if rev2 is None else rev2
         kwargs["rev"] = f"{tag1_name}..{tag2_name}"
-    return list(repo.iter_commits(**kwargs))
+    tmp = list(repo.iter_commits(**kwargs))
+    if first_commit is None:
+        return tmp
+    # we also include first commit in list
+    return [first_commit] + tmp
 
 
 def render_template(context, template_file: str = None) -> str:
