@@ -18,7 +18,7 @@ def get_tags(repo: Repo, tag_regex: str) -> List[Tag]:
     for tag in repo.tags:
         if re.match(compiled_pattern, tag.name):
             res.append(tag)
-    return res
+    return sorted(res, key=lambda x: x.object.authored_date)
 
 
 def get_first_commit(repo: Repo) -> Commit:
