@@ -21,11 +21,11 @@ def cli(
     repo_root: str,
     tags_regex: str = "^v[0-9]",
     starting_rev: str = None,
-    remove_duplicates_entries=True,
-    unreleased=True,
+    remove_duplicates_entries: bool = True,
+    unreleased: bool = True,
     include_type: List[str] = [],
     title: str = "CHANGELOG",
-    unreleased_title="[Unreleased]",
+    unreleased_title: str = "[Unreleased]",
 ):
     repo = Repo(repo_root)
     previous_tag = starting_rev
