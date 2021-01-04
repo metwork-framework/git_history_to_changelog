@@ -16,7 +16,10 @@ from ghtc.models import (
 )
 from ghtc.parser import parse
 
+app = typer.Typer(add_completion=False)
 
+
+@app.command()
 def cli(
     repo_root: str,
     tags_regex: str = "^v[0-9]",
@@ -80,7 +83,7 @@ def cli(
 
 
 def main():
-    typer.run(cli)
+    app()
 
 
 if __name__ == "__main__":
