@@ -1,4 +1,16 @@
-# git_history_to_changelog (ghtc)
+# git_history_to_changelog
+
+[//]: # (automatically generated from https://github.com/metwork-framework/github_organization_management/blob/master/common_files/README.md)
+
+**Status (master branch)**
+
+
+
+[![GitHub CI](https://github.com/metwork-framework/git_history_to_changelog/workflows/CI/badge.svg?branch=master)](https://github.com/metwork-framework/git_history_to_changelog/actions?query=workflow%3ACI&branch=master)
+[![Maintenance](https://github.com/metwork-framework/resources/blob/master/badges/maintained.svg)]()
+
+
+
 
 ## What is it?
 
@@ -15,18 +27,52 @@ Just because we didn't find an existing tool matching our needs.
 Usage: ghtc [OPTIONS] REPO_ROOT
 
 Arguments:
-  REPO_ROOT  [required]
+  REPO_ROOT  the fullpath to the git repository  [required]
 
 Options:
-  --tags-regex TEXT               [default: ^v[0-9]]
-  --starting-rev TEXT
+  --tags-regex TEXT               regex to select tags to show on changelog
+                                  [default: ^v[0-9]]
+
+  --starting-rev TEXT             starting revision
   --remove-duplicates-entries / --no-remove-duplicates-entries
-                                  [default: True]
-  --unreleased / --no-unreleased  [default: True]
-  --include-type TEXT             [default: ]
+                                  if True, remove duplicate entries  [default:
+                                  True]
+
+  --unreleased / --no-unreleased  if True, add a section about unreleased
+                                  changes  [default: True]
+
+  --include-type TEXT             include (only) given conventional types in
+                                  changelog (can be used multiple times, all
+                                  types by default), available types: other,
+                                  build, chore, style, ci, refactor, test,
+                                  docs, perf, fix, feat  [default: ]
+
   --title TEXT                    [default: CHANGELOG]
   --unreleased-title TEXT         [default: [Unreleased]]
   --help                          Show this message and exit.
 ```
 
 The generated CHANGELOG is sent to standard output.
+
+
+
+
+
+
+## Contributing guide
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) file.
+
+
+
+## Code of Conduct
+
+See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) file.
+
+
+
+## Sponsors
+
+*(If you are officially paid to work on MetWork Framework, please contact us to add your company logo here!)*
+
+[![logo](https://raw.githubusercontent.com/metwork-framework/resources/master/sponsors/meteofrance-small.jpeg)](http://www.meteofrance.com)
