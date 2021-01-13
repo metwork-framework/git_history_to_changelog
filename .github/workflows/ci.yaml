@@ -35,7 +35,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --statistics
     - name: Tests and Coverage
       run: |
-        make test
+        make tests
     - name: Coverage
       if: ${{ matrix.python-version == 3.7 }}
       run: |
