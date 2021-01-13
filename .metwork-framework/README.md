@@ -19,7 +19,10 @@ Options:
   --tags-regex TEXT               regex to select tags to show on changelog
                                   [default: ^v[0-9]]
 
-  --starting-rev TEXT             starting revision
+  --starting-rev TEXT             starting revision (if not set
+                                  ghtc_changelog_start tag if exists, else
+                                  first git commit)
+
   --remove-duplicates-entries / --no-remove-duplicates-entries
                                   if True, remove duplicate entries  [default:
                                   True]

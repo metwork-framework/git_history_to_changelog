@@ -26,7 +26,11 @@ def cli(
     tags_regex: str = Option(
         "^v[0-9]", help="regex to select tags to show on changelog"
     ),
-    starting_rev: str = Option(None, help="starting revision"),
+    starting_rev: str = Option(
+        None,
+        help="starting revision (if not set ghtc_changelog_start tag if exists, "
+        "else first git commit)",
+    ),
     remove_duplicates_entries: bool = Option(
         True, help="if True, remove duplicate entries"
     ),
@@ -36,7 +40,7 @@ def cli(
     include_type: List[str] = Option(
         [],
         help="include (only) given conventional types in changelog (can be used "
-        "multiple times, all types by default), available types: %s" % ALL_TYPES
+        "multiple times, all types by default), available types: %s" % ALL_TYPES,
     ),
     title: str = "CHANGELOG",
     unreleased_title: str = "[Unreleased]",
