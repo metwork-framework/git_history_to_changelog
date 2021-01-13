@@ -1,5 +1,5 @@
 from typing import Any, Dict, List, Optional
-import typer
+from typer import Typer, Argument, Option
 from git import Repo
 from ghtc.utils import (
     get_tags,
@@ -16,17 +16,28 @@ from ghtc.models import (
 )
 from ghtc.parser import parse
 
-app = typer.Typer(add_completion=False)
+app = Typer(add_completion=False)
+ALL_TYPES = ", ".join([x.name.lower() for x in ConventionalCommitType])
 
 
 @app.command()
 def cli(
-    repo_root: str,
-    tags_regex: str = "^v[0-9]",
-    starting_rev: str = None,
-    remove_duplicates_entries: bool = True,
-    unreleased: bool = True,
-    include_type: List[str] = [],
+    repo_root: str = Argument(..., help="the fullpath to the git repository"),
+    tags_regex: str = Option(
+        "^v[0-9]", help="regex to select tags to show on changelog"
+    ),
+    starting_rev: str = Option(None, help="starting revision"),
+    remove_duplicates_entries: bool = Option(
+        True, help="if True, remove duplicate entries"
+    ),
+    unreleased: bool = Option(
+        True, help="if True, add a section about unreleased changes"
+    ),
+    include_type: List[str] = Option(
+        [],
+        help="include (only) given conventional types in changelog (can be used "
+        "multiple times, all types by default), available types: %s" % ALL_TYPES
+    ),
     title: str = "CHANGELOG",
     unreleased_title: str = "[Unreleased]",
 ):
