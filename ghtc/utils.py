@@ -29,17 +29,16 @@ def get_commits_between(repo: Repo, rev1: str = None, rev2: str = None) -> List[
     kwargs = {}
     first_commit = None
     if rev1 is None or rev1 == "":
-        tmp_tags = get_tags(repo, "^ghtc_changelog_start$")
-        if len(tmp_tags) == 1:
-            tag1_name = "ghtc_changelog_start"
+        tmp_tags = get_tags(repo, "^ghtc_changelog_start")
+        if len(tmp_tags) >= 1:
+            tag1_name = tmp_tags[-1]
         else:
             first_commit = get_first_commit(repo)
             tag1_name = first_commit.hexsha
     else:
         tag1_name = rev1
     tag2_name = "HEAD" if rev2 is None or rev2 == "" else rev2
-    if rev1 is None or rev1 == "" or rev2 is None or rev2 == "":
-        kwargs["rev"] = f"{tag1_name}..{tag2_name}"
+    kwargs["rev"] = f"{tag1_name}..{tag2_name}"
     tmp = list(repo.iter_commits(**kwargs))
     if first_commit is None:
         return tmp

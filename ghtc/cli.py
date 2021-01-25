@@ -15,6 +15,7 @@ from ghtc.models import (
     UNRELEASED_TAG_TIMESTAMP,
 )
 from ghtc.parser import parse
+from ghtc.overrides import Overrides
 
 app = Typer(add_completion=False)
 ALL_TYPES = ", ".join([x.name.lower() for x in ConventionalCommitType])
@@ -28,14 +29,17 @@ def cli(
     ),
     starting_rev: str = Option(
         None,
-        help="starting revision (if not set ghtc_changelog_start tag if exists, "
-        "else first git commit)",
+        help="starting revision (if not set latest tag starting with "
+        "ghtc_changelog_start if exists, else first git commit)",
     ),
     remove_duplicates_entries: bool = Option(
         True, help="if True, remove duplicate entries"
     ),
     unreleased: bool = Option(
         True, help="if True, add a section about unreleased changes"
+    ),
+    override_file: str = Option(
+        ".ghtc_overrides.ini", help="the path/name of the 'commit overrides' file"
     ),
     include_type: List[str] = Option(
         [],
@@ -45,6 +49,7 @@ def cli(
     title: str = "CHANGELOG",
     unreleased_title: str = "[Unreleased]",
 ):
+    overrides = Overrides(override_file)
     repo = Repo(repo_root)
     previous_tag = starting_rev
     context: Dict[str, Any] = {
@@ -78,7 +83,14 @@ def cli(
         for commit in get_commits_between(repo, previous_tag, rev):
             if commit.hexsha in reverted_commits:
                 continue
-            msg: Optional[ConventionalCommitMessage] = parse(commit.message)
+            msg: Optional[ConventionalCommitMessage] = None
+            if commit.hexsha in overrides.commits:
+                msg = overrides.commits[commit.hexsha]
+                if msg is None:
+                    # ignored message
+                    continue
+            else:
+                msg = parse(commit.message)
             if msg is None:
                 continue
             cat = msg.type
