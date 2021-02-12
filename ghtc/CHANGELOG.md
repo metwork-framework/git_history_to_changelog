@@ -26,7 +26,7 @@
 ### {{ TYPE_MAPPINGS.get(CAT.name, CAT.name) }}
 
 {% for LINE in LINES|sort(attribute='commit_timestamp', reverse=False) -%}
-- {{ LINE.commit_message.description }}
+- {{ LINE.commit_message.description }}{% if DEBUG %} { commit_hash: {{LINE.commit_sha}}, commit_date: {{LINE.commit_date}} }{% endif %}
 {% endfor %}
 {% endif -%}
 {% endfor -%}

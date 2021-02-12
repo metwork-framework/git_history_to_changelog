@@ -48,8 +48,10 @@ def cli(
     ),
     title: str = "CHANGELOG",
     unreleased_title: str = "[Unreleased]",
+    debug: bool = Option(False, help="add debug values for each changelog entry")
 ):
     overrides = Overrides(override_file)
+    overrides.parse()
     repo = Repo(repo_root)
     previous_tag = starting_rev
     context: Dict[str, Any] = {
@@ -105,6 +107,7 @@ def cli(
         entry = ChangelogEntryForATag(tag_name, tag_date, lines)
         if tag is not None or len(lines) > 0:
             context["TAGS"].append(entry)
+        context["DEBUG"] = debug
         previous_tag = tag
     print(render_template(context))
 
