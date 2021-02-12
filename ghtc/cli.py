@@ -48,7 +48,7 @@ def cli(
     ),
     title: str = "CHANGELOG",
     unreleased_title: str = "[Unreleased]",
-    debug: bool = Option(False, help="add debug values for each changelog entry")
+    debug: bool = Option(False, help="add debug values for each changelog entry"),
 ):
     overrides = Overrides(override_file)
     overrides.parse()
