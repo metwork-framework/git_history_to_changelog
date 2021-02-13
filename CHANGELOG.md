@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.2.0 (2021-02-12)
+
+### New Features
+
+- add debug mode and fix changelog override
+
 ## v0.1.0 (2021-01-25)
 
 ### New Features
