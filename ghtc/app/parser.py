@@ -1,9 +1,10 @@
-from typing import Optional, List, Dict
 import re
-from ghtc.models import (
-    ConventionalCommitType,
+from typing import Dict, List, Optional
+
+from ghtc.domain.commit import (
     ConventionalCommitFooter,
     ConventionalCommitMessage,
+    ConventionalCommitType,
 )
 
 
@@ -71,11 +72,13 @@ def parse(commit_message: str) -> Optional[ConventionalCommitMessage]:
             else:
                 if tmp3 is not None:
                     breaking = True
-                    footers.append(ConventionalCommitFooter("BREAKING CHANGE", tmp3[1]))
+                    footers.append(
+                        ConventionalCommitFooter(key="BREAKING CHANGE", value=tmp3[1])
+                    )
                 elif tmp1 is not None:
-                    footers.append(ConventionalCommitFooter(tmp1[1], tmp1[2]))
+                    footers.append(ConventionalCommitFooter(key=tmp1[1], value=tmp1[2]))
                 elif tmp2 is not None:
-                    footers.append(ConventionalCommitFooter(tmp2[1], tmp2[2]))
+                    footers.append(ConventionalCommitFooter(key=tmp2[1], value=tmp2[2]))
     return ConventionalCommitMessage(
         type=type_string_to_commit_type(type_str),
         scope=scope,
@@ -84,3 +87,17 @@ def parse(commit_message: str) -> Optional[ConventionalCommitMessage]:
         description=description,
         breaking=breaking,
     )
+
+
+def get_reverted_commit(commit_message: str) -> Optional[str]:
+    for tmp in commit_message.splitlines():
+        line = tmp.strip()
+        if line.startswith("This reverts commit "):
+            sha = line.replace("This reverts commit ", "").split(".")[0]
+            if len(sha) >= 40:
+                return sha
+        if line.startswith("Revert:"):
+            sha = line.replace("Revert:", "").strip()
+            if len(sha) >= 40:
+                return sha
+    return None

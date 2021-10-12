@@ -1,9 +1,10 @@
-from ghtc.parser import parse, ConventionalCommitType
+from ghtc.app.parser import parse
+from ghtc.domain.commit import ConventionalCommitType
 
 
 MSG1 = """feat: allow provided config object to extend other configs
 
-BREAKING CHANGE: `extends` key in config file is now used for extending other config files
+BREAKING CHANGE: `extends` key in config file is now used for extending other files
 """
 
 MSG2 = """refactor!: drop support for Node 6"""
@@ -38,7 +39,7 @@ def test_valid_messages():
     assert len(msg.footers) == 1
     assert msg.footers[0].key == "BREAKING CHANGE"
     assert msg.footers[0].value == (
-        "`extends` key in config file is now used for extending other config files"
+        "`extends` key in config file is now used for extending other files"
     )
     msg = parse(MSG2)
     assert msg.type == ConventionalCommitType.REFACTOR

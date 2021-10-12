@@ -1,0 +1,5 @@
+typer
+pydantic
+mfutil
+GitPython
+mflog
