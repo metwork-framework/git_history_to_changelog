@@ -1,103 +1,33 @@
-import re
-from typing import Dict, List, Optional
+from abc import ABC, abstractmethod
+from typing import List, Optional
 
-from ghtc.domain.commit import (
-    ConventionalCommitFooter,
-    ConventionalCommitMessage,
-    ConventionalCommitType,
-)
+from ghtc.domain.changelog import ChangelogEntry
 
 
-TYPE_MAPPINGS: Dict[str, ConventionalCommitType] = {
-    "feat": ConventionalCommitType.FEAT,
-    "fix": ConventionalCommitType.FIX,
-    "build": ConventionalCommitType.BUILD,
-    "chore": ConventionalCommitType.CHORE,
-    "ci": ConventionalCommitType.CI,
-    "docs": ConventionalCommitType.DOCS,
-    "doc": ConventionalCommitType.DOCS,
-    "style": ConventionalCommitType.STYLE,
-    "refactor": ConventionalCommitType.REFACTOR,
-    "perf": ConventionalCommitType.PERF,
-    "perfs": ConventionalCommitType.PERF,
-    "test": ConventionalCommitType.TEST,
-    "tests": ConventionalCommitType.TEST,
-}
-TITLE_REGEX = r"^([a-zA-Z0-9_-]+)(!{0,1})(\([a-zA-Z0-9_-]*\)){0,1}(!{0,1}): (.*)$"
-TITLE_COMPILED_REGEX = re.compile(TITLE_REGEX)
-FOOTER_REGEX1 = r"^([a-zA-Z0-9_-]+): (.*)$"
-FOOTER_COMPILED_REGEX1 = re.compile(FOOTER_REGEX1)
-FOOTER_REGEX2 = r"^([a-zA-Z0-9_-]+) #(.*)$"
-FOOTER_COMPILED_REGEX2 = re.compile(FOOTER_REGEX2)
-BREAKING_CHANGE_FOOTER_REGEX = r"^BREAKING[- ]CHANGE: (.*)$"
-BREAKING_CHANGE_FOOTER_COMPILED_REGEX = re.compile(BREAKING_CHANGE_FOOTER_REGEX)
+class ParserBackendInterface(ABC):
+    @abstractmethod
+    def parse(self, commit_message: str) -> List[ChangelogEntry]:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def get_reverted_commit(self, commit_message: str) -> Optional[str]:
+        raise NotImplementedError
 
 
-def type_string_to_commit_type(type_str: str) -> ConventionalCommitType:
-    if type_str not in TYPE_MAPPINGS:
-        return ConventionalCommitType.OTHER
-    return TYPE_MAPPINGS[type_str]
+class ParserController:
+    def __init__(self, parsers: List[ParserBackendInterface]):
+        self.parsers: List[ParserBackendInterface] = parsers
 
+    def parse(self, commit_message: str) -> List[ChangelogEntry]:
+        for p in self.parsers:
+            cle: List[ChangelogEntry] = p.parse(commit_message)
+            if len(cle) > 0:
+                return cle
+        return []
 
-def parse(commit_message: str) -> Optional[ConventionalCommitMessage]:
-    if not commit_message:
-        return None
-    lines = commit_message.splitlines()
-    first_line = lines[0]
-    match = TITLE_COMPILED_REGEX.match(first_line)
-    if match is None:
-        return None
-    type_str = match[1].lower()
-    breaking = False
-    if match[2] or match[4]:
-        breaking = True
-    scope = None
-    if match[3]:
-        scope = match[3].lower()[1:-1]
-    description = match[5]
-    body = None
-    footers: List[ConventionalCommitFooter] = []
-    if len(lines) > 1 and lines[1] == "":
-        for line in lines[1:]:
-            if not line:
-                continue
-            tmp1 = FOOTER_COMPILED_REGEX1.match(line)
-            tmp2 = FOOTER_COMPILED_REGEX2.match(line)
-            tmp3 = BREAKING_CHANGE_FOOTER_COMPILED_REGEX.match(line)
-            if len(footers) == 0 and tmp1 is None and tmp2 is None and tmp3 is None:
-                if body is None:
-                    body = f"{line}"
-                else:
-                    body += f"\n{line}"
-            else:
-                if tmp3 is not None:
-                    breaking = True
-                    footers.append(
-                        ConventionalCommitFooter(key="BREAKING CHANGE", value=tmp3[1])
-                    )
-                elif tmp1 is not None:
-                    footers.append(ConventionalCommitFooter(key=tmp1[1], value=tmp1[2]))
-                elif tmp2 is not None:
-                    footers.append(ConventionalCommitFooter(key=tmp2[1], value=tmp2[2]))
-    return ConventionalCommitMessage(
-        type=type_string_to_commit_type(type_str),
-        scope=scope,
-        body=body,
-        footers=footers,
-        description=description,
-        breaking=breaking,
-    )
-
-
-def get_reverted_commit(commit_message: str) -> Optional[str]:
-    for tmp in commit_message.splitlines():
-        line = tmp.strip()
-        if line.startswith("This reverts commit "):
-            sha = line.replace("This reverts commit ", "").split(".")[0]
-            if len(sha) >= 40:
+    def get_reverted_commit(self, commit_message: str) -> Optional[str]:
+        for p in self.parsers:
+            sha: Optional[str] = p.get_reverted_commit(commit_message)
+            if sha is not None:
                 return sha
-        if line.startswith("Revert:"):
-            sha = line.replace("Revert:", "").strip()
-            if len(sha) >= 40:
-                return sha
-    return None
+        return None

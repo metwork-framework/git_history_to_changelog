@@ -88,7 +88,7 @@ lint: devvenv _check_app_dirs ## Lint the code
 	@$(ENTER_VENV) && which $(ISORT) >/dev/null 2>&1 || exit 0 ; echo "Linting with isort..." && $(ISORT) $(ISORT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS) || ( echo "ERROR: lint errors with isort => maybe you can try 'make reformat' to fix this" ; exit 1)
 	@$(ENTER_VENV) && which $(BLACK) >/dev/null 2>&1 || exit 0 ; echo "Linting with black..." && $(BLACK) $(BLACK_LINT_OPTIONS) $(_APP_AND_TEST_DIRS) || ( echo "ERROR: lint errors with black => maybe you can try 'make reformat' to fix this" ; exit 1)
 	@$(ENTER_VENV) && which $(FLAKE8) >/dev/null 2>&1 || exit 0 ; echo "Linting with flake8..." && $(FLAKE8) $(FLAKE8_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
-	@$(ENTER_VENV) && which $(PYLINT) >/dev/null 2>&1 || exit 0  ; echo "Linting with pylint..." && $(PYLINT) $(PYLINT_LINT_OPTIONS) $(APP_DIRS)
+	@$(ENTER_VENV) && which $(PYLINT) >/dev/null 2>&1 || exit 0  ; echo "Linting with pylint..." && $(PYLINT) $(PYLINT_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
 	@$(ENTER_VENV) && which $(MYPY) >/dev/null 2>&1 || exit 0  ; echo "Linting with mypy..." && $(MYPY) $(MYPY_LINT_OPTIONS) $(_APP_AND_TEST_DIRS)
 	@$(ENTER_VENV) && which $(LINTIMPORTS) >/dev/null 2>&1 || exit 0  ; if test -f .importlinter; then echo "Linting with lint-imports..."; $(LINTIMPORTS); fi
 	@$(ENTER_VENV) && which $(BANDIT) >/dev/null 2>&1 || exit 0  ; echo "Linting with bandit..." && $(BANDIT) $(BANDIT_LINT_OPTIONS) $(APP_DIRS)
@@ -106,8 +106,8 @@ tests: devvenv ## Execute unit-tests
 	@$(ENTER_VENV) && which $(PYTEST) >/dev/null 2>&1 && export PYTHONPATH=".:${PYTHONPATH}" && pytest $(TEST_DIRS)
 
 coverage_console: devvenv # Execute unit-tests and show coverage in console
-	@$(ENTER_VENV) && which $(PYTEST) >/dev/null 2>&1 && export PYTHONPATH=".:${PYTHONPATH}" && pytest --cov=$(APP_DIRS)
+	@$(ENTER_VENV) && which $(PYTEST) >/dev/null 2>&1 && export PYTHONPATH=".:${PYTHONPATH}" && pytest --cov=$(APP_DIRS) $(TEST_DIRS)
 
 coverage_html: devvenv # Execute unit-tests and show coverage in html
-	@$(ENTER_VENV) && which $(PYTEST) >/dev/null 2>&1 && export PYTHONPATH=".:${PYTHONPATH}" && pytest --cov-report=html --cov=$(APP_DIRS)
+	@$(ENTER_VENV) && which $(PYTEST) >/dev/null 2>&1 && export PYTHONPATH=".:${PYTHONPATH}" && pytest --cov-report=html --cov=$(APP_DIRS) $(TEST_DIRS)
 

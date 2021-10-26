@@ -1,12 +1,12 @@
-from typing import Dict, Optional
+from typing import Dict, List
 
 from ghtc.app.override import OverrideBackendInterface
-from ghtc.domain.commit import ConventionalCommitMessage
+from ghtc.domain.changelog import ChangelogEntry
 
 
 class OverrideDummyBackend(OverrideBackendInterface):
-    def __init__(self, overrides: Dict[str, ConventionalCommitMessage]):
+    def __init__(self, overrides: Dict[str, List[ChangelogEntry]] = {}):
         self.overrides = overrides
 
-    def get_override(self, hexsha: str) -> Optional[ConventionalCommitMessage]:
-        return self.overrides.get(hexsha)
+    def get_override(self, hexsha: str) -> List[ChangelogEntry]:
+        return self.overrides.get(hexsha, [])
