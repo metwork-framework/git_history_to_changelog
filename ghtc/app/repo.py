@@ -8,7 +8,7 @@ from ghtc.domain.tag import BeginningTag, HeadTag, SpecialTag, Tag
 
 class RepoBackendInterface(ABC):
     @abstractmethod
-    def get_tags_between(self, tag1: Tag, tag2: Tag) -> List[Tag]:
+    def get_all_tags(self) -> List[Tag]:
         raise NotImplementedError()
 
     @abstractmethod
@@ -24,21 +24,13 @@ class RepoController:
     def __init__(self, backend: RepoBackendInterface):
         self.backend: RepoBackendInterface = backend
 
-    def get_tags_between(
-        self, tag1: Tag, tag2: Tag, tags_regex: str = ".*"
-    ) -> List[Tag]:
+    def get_tags(self, tags_regex: str = ".*") -> List[Tag]:
+        res: List[Tag] = []
         compiled_pattern = re.compile(tags_regex)
-        res = []
-        for tag in self.backend.get_tags_between(tag1, tag2):
+        for tag in self.backend.get_all_tags():
             if re.match(compiled_pattern, tag.name):
                 res.append(tag)
         return sorted(res, key=lambda x: x.date)
-
-    def get_tags(self, tags_regex: str = ".*") -> List[Tag]:
-        first_commit = self.get_first_commit()
-        tag1 = Tag(name=first_commit.hexsha, date=first_commit.date)
-        tag2 = HeadTag()
-        return self.get_tags_between(tag1, tag2, tags_regex=tags_regex)
 
     def _get_tag(self, tag_name: Optional[str], special_tag: SpecialTag) -> Tag:
         if tag_name is None:

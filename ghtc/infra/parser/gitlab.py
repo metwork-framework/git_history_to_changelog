@@ -4,6 +4,9 @@ from ghtc.app.parser import ParserBackendInterface
 from ghtc.domain.changelog import ChangelogEntry, ChangelogEntryType
 
 
+CHANGELOG_ENTRY_TYPE_NAMES = [x.name for x in ChangelogEntryType]
+
+
 class ParserGitlabBackend(ParserBackendInterface):
     def parse(self, commit_message: str) -> List[ChangelogEntry]:
         if not commit_message:
@@ -16,7 +19,7 @@ class ParserGitlabBackend(ParserBackendInterface):
                 empty_line_found = True
             elif line.startswith("Changelog:") and empty_line_found:
                 tmp = line.split(":", 1)[1].strip().upper()
-                if tmp in ChangelogEntryType:
+                if tmp in CHANGELOG_ENTRY_TYPE_NAMES:
                     type = ChangelogEntryType[tmp]
         if type is None:
             return []

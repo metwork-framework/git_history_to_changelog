@@ -6,4 +6,3 @@ pytest-cov
 black
 pylint
 isort
-devtools

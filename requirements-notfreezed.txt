@@ -3,3 +3,6 @@ pydantic
 mfutil
 GitPython
 mflog
+devtools
+devtools[pygments]
+pyinstaller

@@ -11,9 +11,8 @@ from ghtc.app.parser import ParserController
 from ghtc.app.repo import RepoController
 from ghtc.domain.changelog import ChangelogEntryType
 from ghtc.domain.tag import Tag
-from ghtc.infra.override.dummy import OverrideDummyBackend
-from ghtc.infra.parser.conventional import ParserConventionalBackend
-from ghtc.infra.parser.revert import ParserRevertBackend
+from ghtc.infra.override.inifile import OverrideInifileBackend
+from ghtc.infra.parser import ALL_PARSERS
 from ghtc.infra.repo.git import RepoGitBackend
 
 
@@ -50,7 +49,7 @@ def cli(
     ),
     title: str = "CHANGELOG",
     unreleased_title: str = "[Unreleased]",
-    debug: bool = Option(False, help="add debug values for each changelog entry"),
+    debug: bool = Option(False),
     template_file: Optional[str] = Option(None, help="use an alternate template file"),
 ):
     included_cats: List[ChangelogEntryType] = [
@@ -60,10 +59,14 @@ def cli(
         included_cats = [
             x for x in list(ChangelogEntryType) if x.name.lower() in include_type
         ]
+    if debug:
+        print("DEBUG: included_cats:")
+        debug_print(included_cats)
+    parserc = ParserController(ALL_PARSERS)
     x = ChangelogController(
         repo=RepoController(RepoGitBackend(repo_root)),
-        parser=ParserController([ParserRevertBackend(), ParserConventionalBackend()]),
-        override=OverrideController(OverrideDummyBackend()),
+        parser=parserc,
+        override=OverrideController(OverrideInifileBackend(override_file, parserc)),
         tags_regex=tags_regex,
         commit_types=included_cats,
         unreleased=unreleased,
@@ -74,8 +77,10 @@ def cli(
         tag2 = x.repo.get_tag2(None)
     else:
         tag2 = x.repo.get_tags()[-1]
+    if debug:
+        print("DEBUG: tag1, tag2")
+        debug_print(tag1, tag2)
     c = x.get_changelog(tag1, tag2)
-    debug_print(c)
     if template_file is not None:
         template_to_read = template_file
     else:
@@ -84,6 +89,9 @@ def cli(
         content = f.read()
     template = jinja2.Template(content)
     context = {"CHANGELOG": c, "TITLE": title, "UNRELEASED_TITLE": unreleased_title}
+    if debug:
+        print("DEBUG: jinja2 context")
+        debug_print(context)
     print(template.render(context))
 
 

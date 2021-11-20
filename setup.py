@@ -1,22 +1,24 @@
-from setuptools import setup
-from setuptools import find_packages
+from setuptools import find_packages, setup
 
-with open('requirements.txt') as reqs:
+
+with open("requirements.txt") as reqs:
     install_requires = [
-        line for line in reqs.read().split('\n')
-        if (line and not line.startswith('--')) and (";" not in line)]
+        line
+        for line in reqs.read().split("\n")
+        if (line and not line.startswith("--")) and (";" not in line)
+    ]
 
 with open("README.md") as f:
     long_description = f.read()
 
-#Version "0.0.0" will be replaced by CI when releasing
+# Version "0.0.0" will be replaced by CI when releasing
 setup(
     author="Fabien MARTY",
     author_email="fabien.marty@meteo.fr",
-    name='ghtc',
+    name="ghtc",
     version="0.0.0",
     license="BSD 3",
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     url="https://git.meteo.fr/dsi-dev-ws/ghtc",
     description="ghtc service",
     long_description=long_description,
@@ -28,5 +30,5 @@ setup(
         "console_scripts": [
             "ghtc = ghtc.cli:main",
         ]
-    }
+    },
 )
