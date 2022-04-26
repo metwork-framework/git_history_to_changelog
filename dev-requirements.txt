@@ -1,5 +1,5 @@
 -r requirements.txt
-mypy
+mypy<0.900
 flake8
 pytest
 pytest-cov
