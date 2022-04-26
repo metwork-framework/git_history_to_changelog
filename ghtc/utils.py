@@ -1,7 +1,7 @@
 from typing import List, Optional
 import os
 import jinja2
-from git import Repo, Tag
+from git import Repo, Tag, Commit
 import re
 
 CURRENT_DIR = os.path.dirname(os.path.realpath(__file__))
