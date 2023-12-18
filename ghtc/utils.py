@@ -25,7 +25,7 @@ def get_first_commit(repo: Repo) -> Commit:
     return list(repo.iter_commits(max_parents=0))[0]
 
 
-def get_commits_between(repo: Repo, rev1: str = None, rev2: str = None) -> List[Commit]:
+def get_commits_between(repo: Repo, rev1: str = "", rev2: str = "") -> List[Commit]:
     kwargs = {}
     first_commit = None
     if rev1 is None or rev1 == "":
@@ -46,8 +46,8 @@ def get_commits_between(repo: Repo, rev1: str = None, rev2: str = None) -> List[
     return [first_commit] + tmp
 
 
-def render_template(context, template_file: str = None) -> str:
-    if template_file is not None:
+def render_template(context, template_file: str = "") -> str:
+    if template_file is not None and template_file != "":
         template_to_read = template_file
     else:
         template_to_read = f"{CURRENT_DIR}/CHANGELOG.md"
