@@ -47,7 +47,7 @@ class Overrides:
         return True
 
     def _parse(self, commit, commit_message) -> Optional[
-        ConventionalCommitMessage]:
+            ConventionalCommitMessage]:
         res: Optional[ConventionalCommitMessage] = None
         if commit_message is not None:
             res = parse(commit_message)
