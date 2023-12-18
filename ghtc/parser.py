@@ -22,14 +22,16 @@ TYPE_MAPPINGS: Dict[str, ConventionalCommitType] = {
     "test": ConventionalCommitType.TEST,
     "tests": ConventionalCommitType.TEST,
 }
-TITLE_REGEX = r"^([a-zA-Z0-9_-]+)(!{0,1})(\([a-zA-Z0-9_-]*\)){0,1}(!{0,1}): (.*)$"
+TITLE_REGEX =
+    r"^([a-zA-Z0-9_-]+)(!{0,1})(\([a-zA-Z0-9_-]*\)){0,1}(!{0,1}): (.*)$"
 TITLE_COMPILED_REGEX = re.compile(TITLE_REGEX)
 FOOTER_REGEX1 = r"^([a-zA-Z0-9_-]+): (.*)$"
 FOOTER_COMPILED_REGEX1 = re.compile(FOOTER_REGEX1)
 FOOTER_REGEX2 = r"^([a-zA-Z0-9_-]+) #(.*)$"
 FOOTER_COMPILED_REGEX2 = re.compile(FOOTER_REGEX2)
 BREAKING_CHANGE_FOOTER_REGEX = r"^BREAKING[- ]CHANGE: (.*)$"
-BREAKING_CHANGE_FOOTER_COMPILED_REGEX = re.compile(BREAKING_CHANGE_FOOTER_REGEX)
+BREAKING_CHANGE_FOOTER_COMPILED_REGEX =
+    re.compile(BREAKING_CHANGE_FOOTER_REGEX)
 
 
 def type_string_to_commit_type(type_str: str) -> ConventionalCommitType:
@@ -63,7 +65,8 @@ def parse(commit_message: str) -> Optional[ConventionalCommitMessage]:
             tmp1 = FOOTER_COMPILED_REGEX1.match(line)
             tmp2 = FOOTER_COMPILED_REGEX2.match(line)
             tmp3 = BREAKING_CHANGE_FOOTER_COMPILED_REGEX.match(line)
-            if len(footers) == 0 and tmp1 is None and tmp2 is None and tmp3 is None:
+            if len(footers) == 0 and tmp1 is None and tmp2 is None
+                                 and tmp3 is None:
                 if body is None:
                     body = f"{line}"
                 else:
@@ -71,7 +74,8 @@ def parse(commit_message: str) -> Optional[ConventionalCommitMessage]:
             else:
                 if tmp3 is not None:
                     breaking = True
-                    footers.append(ConventionalCommitFooter("BREAKING CHANGE", tmp3[1]))
+                    footers.append(ConventionalCommitFooter("BREAKING CHANGE",
+                                                            tmp3[1]))
                 elif tmp1 is not None:
                     footers.append(ConventionalCommitFooter(tmp1[1], tmp1[2]))
                 elif tmp2 is not None:

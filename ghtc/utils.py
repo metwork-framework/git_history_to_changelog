@@ -24,7 +24,8 @@ def get_first_commit(repo: Repo) -> Commit:
     return list(repo.iter_commits(max_parents=0))[0]
 
 
-def get_commits_between(repo: Repo, rev1: str = "", rev2: str = "") -> List[Commit]:
+def get_commits_between(repo: Repo, rev1: str = "",
+                        rev2: str = "") -> List[Commit]:
     kwargs = {}
     first_commit = None
     if rev1 is None or rev1 == "":

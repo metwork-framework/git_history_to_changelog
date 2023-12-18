@@ -60,5 +60,6 @@ class ChangelogEntryForATag:
 
     def __post_init__(self):
         object.__setattr__(
-            self, "tag_date", time.strftime("%Y-%m-%d", time.gmtime(self.tag_timestamp))
+            self, "tag_date", time.strftime("%Y-%m-%d",
+                                            time.gmtime(self.tag_timestamp))
         )  # because frozen=True, we have to use this ugly __setattr__

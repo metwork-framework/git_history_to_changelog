@@ -3,7 +3,8 @@ from ghtc.parser import parse, ConventionalCommitType
 
 MSG1 = """feat: allow provided config object to extend other configs
 
-BREAKING CHANGE: `extends` key in config file is now used for extending other config files
+BREAKING CHANGE: `extends` key in config file is now used for extending
+                 other config files
 """
 
 MSG2 = """refactor!: drop support for Node 6"""
@@ -34,11 +35,13 @@ def test_valid_messages():
     assert msg.breaking
     assert msg.body is None
     assert msg.scope is None
-    assert msg.description == "allow provided config object to extend other configs"
+    assert msg.description ==
+        "allow provided config object to extend other configs"
     assert len(msg.footers) == 1
     assert msg.footers[0].key == "BREAKING CHANGE"
     assert msg.footers[0].value == (
-        "`extends` key in config file is now used for extending other config files"
+        "`extends` key in config file is now used for extending "
+        "other config files"
     )
     msg = parse(MSG2)
     assert msg.type == ConventionalCommitType.REFACTOR

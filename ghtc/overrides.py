@@ -28,7 +28,8 @@ class Overrides:
                 match = GIT_COMMIT_DELIMITER_COMPILED_REGEX.match(line)
                 if match is None:
                     if commit is None:
-                        LOGGER.warning("badly formatted overrides file => ignoring")
+                        LOGGER.warning(
+                            "badly formatted overrides file => ignoring")
                         return False
                     if commit_message is None:
                         if len(line) > 0:
@@ -37,14 +38,16 @@ class Overrides:
                         commit_message = commit_message + "\n" + line
                 else:
                     if commit is not None:
-                        self.commits[commit] = self._parse(commit, commit_message)
+                        self.commits[commit] = 
+                            self._parse(commit, commit_message)
                     commit = match[1]
                     commit_message = None
             if commit is not None:
                 self.commits[commit] = self._parse(commit, commit_message)
         return True
 
-    def _parse(self, commit, commit_message) -> Optional[ConventionalCommitMessage]:
+    def _parse(self, commit, commit_message) -> Optional[
+        ConventionalCommitMessage]:
         res: Optional[ConventionalCommitMessage] = None
         if commit_message is not None:
             res = parse(commit_message)

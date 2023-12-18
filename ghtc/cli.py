@@ -39,16 +39,19 @@ def cli(
         True, help="if True, add a section about unreleased changes"
     ),
     override_file: str = Option(
-        ".ghtc_overrides.ini", help="the path/name of the 'commit overrides' file"
+        ".ghtc_overrides.ini",
+        help="the path/name of the 'commit overrides' file"
     ),
     include_type: List[str] = Option(
         [],
-        help="include (only) given conventional types in changelog (can be used "
-        "multiple times, all types by default), available types: %s" % ALL_TYPES,
+        help="include (only) given conventional types in changelog (can be "
+        "used multiple times, all types by default), available types: %s"
+        % ALL_TYPES,
     ),
     title: str = "CHANGELOG",
     unreleased_title: str = "[Unreleased]",
-    debug: bool = Option(False, help="add debug values for each changelog entry"),
+    debug: bool = Option(False,
+                         help="add debug values for each changelog entry"),
 ):
     overrides = Overrides(override_file)
     overrides.parse()
