@@ -35,7 +35,7 @@ def test_valid_messages():
     assert msg.breaking
     assert msg.body is None
     assert msg.scope is None
-    assert msg.description ==
+    assert msg.description == \
         "allow provided config object to extend other configs"
     assert len(msg.footers) == 1
     assert msg.footers[0].key == "BREAKING CHANGE"

@@ -38,7 +38,7 @@ class Overrides:
                         commit_message = commit_message + "\n" + line
                 else:
                     if commit is not None:
-                        self.commits[commit] = 
+                        self.commits[commit] = \
                             self._parse(commit, commit_message)
                     commit = match[1]
                     commit_message = None
