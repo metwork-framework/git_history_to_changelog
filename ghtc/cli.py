@@ -43,8 +43,8 @@ def cli(
     ),
     include_type: List[str] = Option(
         [],
-        help="include (only) given conventional types in changelog (can be "
-        "used multiple times, all types by default), available types: %s" % ALL_TYPES,
+        help="include (only) given conventional types in changelog (can be used "
+        "multiple times, all types by default), available types: %s" % ALL_TYPES,
     ),
     title: str = "CHANGELOG",
     unreleased_title: str = "[Unreleased]",
