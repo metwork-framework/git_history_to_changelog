@@ -7,7 +7,6 @@ UNRELEASED_TAG_TIMESTAMP = 9999999999
 
 
 class ConventionalCommitType(enum.Enum):
-
     OTHER = 0
     BUILD = 1
     CHORE = 2
@@ -23,14 +22,12 @@ class ConventionalCommitType(enum.Enum):
 
 @dataclass(frozen=True)
 class ConventionalCommitFooter:
-
     key: str
     value: str
 
 
 @dataclass(frozen=True, unsafe_hash=True)
 class ConventionalCommitMessage:
-
     type: ConventionalCommitType
     description: str
     breaking: bool
@@ -41,7 +38,6 @@ class ConventionalCommitMessage:
 
 @dataclass(frozen=True)
 class ChangelogLine:
-
     commit_message: ConventionalCommitMessage
     commit_sha: str
     commit_timestamp: int
@@ -57,7 +53,6 @@ class ChangelogLine:
 
 @dataclass(frozen=True)
 class ChangelogEntryForATag:
-
     tag_name: str
     tag_timestamp: int
     lines_by_type: Dict[ConventionalCommitType, List[ChangelogLine]]
