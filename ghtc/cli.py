@@ -71,7 +71,7 @@ def cli(
         if tag is None:
             tag_name = unreleased_title
             tag_date = UNRELEASED_TAG_TIMESTAMP
-            rev = None
+            rev = ""
         else:
             tag_name = tag.name
             tag_date = tag.object.authored_date
