@@ -1,5 +1,5 @@
 typer
 mfutil
-GitPython==3.1.14
+GitPython
 mflog
 setuptools; python_version > '3.11'
