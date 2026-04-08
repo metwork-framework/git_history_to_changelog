@@ -66,7 +66,7 @@ def parse(commit_message: str) -> Optional[ConventionalCommitMessage]:
             tmp2 = FOOTER_COMPILED_REGEX2.match(line)
             tmp3 = BREAKING_CHANGE_FOOTER_COMPILED_REGEX.match(line)
             if len(footers) == 0 and tmp1 is None and tmp2 is None\
-                and tmp3 is None:
+                                 and tmp3 is None:
                 if body is None:
                     body = f"{line}"
                 else:
@@ -75,7 +75,7 @@ def parse(commit_message: str) -> Optional[ConventionalCommitMessage]:
                 if tmp3 is not None:
                     breaking = True
                     footers.append(ConventionalCommitFooter("BREAKING CHANGE",
-                        tmp3[1]))
+                                                            tmp3[1]))
                 elif tmp1 is not None:
                     footers.append(ConventionalCommitFooter(tmp1[1], tmp1[2]))
                 elif tmp2 is not None:

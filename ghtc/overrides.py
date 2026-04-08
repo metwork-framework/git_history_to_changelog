@@ -29,7 +29,7 @@ class Overrides:
                 if match is None:
                     if commit is None:
                         LOGGER.warning("badly formatted overrides file => "
-                            "ignoring")
+                                       "ignoring")
                         return False
                     if commit_message is None:
                         if len(line) > 0:
@@ -39,7 +39,7 @@ class Overrides:
                 else:
                     if commit is not None:
                         self.commits[commit] = self._parse(commit,
-                            commit_message)
+                                                           commit_message)
                     commit = match[1]
                     commit_message = None
             if commit is not None:
