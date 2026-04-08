@@ -22,8 +22,8 @@ TYPE_MAPPINGS: Dict[str, ConventionalCommitType] = {
     "test": ConventionalCommitType.TEST,
     "tests": ConventionalCommitType.TEST,
 }
-TITLE_REGEX = \ 
-r"^([a-zA-Z0-9_-]+)(!{0,1})(\([a-zA-Z0-9_-]*\)){0,1}(!{0,1}): (.*)$"
+TITLE_REGEX = \
+    r"^([a-zA-Z0-9_-]+)(!{0,1})(\([a-zA-Z0-9_-]*\)){0,1}(!{0,1}): (.*)$"
 TITLE_COMPILED_REGEX = re.compile(TITLE_REGEX)
 FOOTER_REGEX1 = r"^([a-zA-Z0-9_-]+): (.*)$"
 FOOTER_COMPILED_REGEX1 = re.compile(FOOTER_REGEX1)
