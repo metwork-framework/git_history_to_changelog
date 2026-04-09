@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.2.2 (2026-04-08)
+
+### New Features
+
+- add tests on python 3.13 and 3.14
+
 ## v0.2.1 (2024-11-25)
 
 - No interesting change
